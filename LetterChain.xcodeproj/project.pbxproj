@@ -34,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D9172CFC290ACA7F00581FE4 /* WireFrames.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WireFrames.png; sourceTree = "<group>"; };
 		D9F23573290ABB16009D3678 /* LetterChain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LetterChain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9F23576290ABB16009D3678 /* LetterChainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterChainApp.swift; sourceTree = "<group>"; };
 		D9F23578290ABB16009D3678 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,6 +46,7 @@
 		D9F2358E290ABB17009D3678 /* LetterChainUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LetterChainUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9F23592290ABB17009D3678 /* LetterChainUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterChainUITests.swift; sourceTree = "<group>"; };
 		D9F23594290ABB17009D3678 /* LetterChainUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterChainUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D9F235A1290AC672009D3678 /* logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = logic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D98C6D6C290B064F00F55B28 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		D9F2356A290ABB16009D3678 = {
 			isa = PBXGroup;
 			children = (
@@ -95,8 +104,11 @@
 		D9F23575290ABB16009D3678 /* LetterChain */ = {
 			isa = PBXGroup;
 			children = (
+				D98C6D6C290B064F00F55B28 /* Fonts */,
+				D9F235A1290AC672009D3678 /* logic.swift */,
 				D9F23576290ABB16009D3678 /* LetterChainApp.swift */,
 				D9F23578290ABB16009D3678 /* ContentView.swift */,
+				D9172CFC290ACA7F00581FE4 /* WireFrames.png */,
 				D9F2357A290ABB17009D3678 /* Assets.xcassets */,
 				D9F2357C290ABB17009D3678 /* LetterChain.entitlements */,
 				D9F2357D290ABB17009D3678 /* Preview Content */,
