@@ -16,38 +16,63 @@ struct CustomText : ViewModifier {
 
 
 
-func startGame(_ state: inout GameLogic, _ isPlaying: inout Bool) -> Void{
+func startGame(_ state: inout GameLogic) -> Void{
     
     state.resetGame()
     state.getRandomWord()
-    isPlaying = true
+    state.isPlaying = true
     
     return
 
 }
 
-func submitInput(_ state: inout GameLogic, _ isPlaying: inout Bool) -> Void{
+func submitInput(_ state: inout GameLogic, _ validator: WordValidator) -> Void{
     guard state.validateInput() == true else {
         return
     }
+    
+    guard validator.validateInput(state.playerWord) == true else{
+        gameOver(&state,  "invalid")
+        return
+    }
+    
     state.capitaliseWord()
-    let firstLetter = state.playerWord[state.playerWord.startIndex]
+    
+    let firstLetter = String(state.playerWord[state.playerWord.startIndex])
+    
     if firstLetter != state.startingLetter{
-        state.gameOver("wrongLetter")
-        isPlaying = false
+        gameOver(&state,  "wrongLetter")
+
     } else if state.previousWords.contains(state.playerWord) == true{
-        state.gameOver("repeated")
-        isPlaying = false
+        gameOver(&state, "invalid")
     } else {
         state.newRound()
     }
 }
 
+func gameOver(_ state:inout GameLogic,  _ condition: String){
+    if state.playerScore > state.highScore{
+        state.updateHighScore()
+    }
+    state.gameOver(condition)
+    state.isPlaying = false
+}
+
+func getRandomWord(_ validator: WordValidator)-> String{
+    return validator.allWords.randomElement()!
+}
+
 struct ContentView: View {
     
-    @State var isPlaying: Bool = false
+    @State var timeRemaining = 15
+    let timer = Timer.publish(every: 1, on : .main, in: .common).autoconnect()
+    
+
     
     @State var session = GameLogic()
+    
+
+    let validator = WordValidator()
     
     var body: some View {
         
@@ -56,7 +81,7 @@ struct ContentView: View {
             LinearGradient(gradient: Gradient(colors: [Color("Top"), Color("Bottom")]), startPoint: /*@START_MENU_TOKEN@*/.top/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
             
-            if isPlaying == false{
+            if session.isPlaying == false{
                 VStack {
                     Spacer()
                     Text("Welcome To").modifier(CustomText())
@@ -65,16 +90,18 @@ struct ContentView: View {
                         .fontWeight(.bold)
                         .modifier(CustomText())
                     Spacer()
-                    Text(session.instruction).modifier(CustomText())
+                    Text("Hi-Score: " + String(session.highScore)).modifier(CustomText())
                     Spacer()
-                    Button("Start Game"){startGame(&session,&isPlaying)} .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).modifier(CustomText()).background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
+                    Text(session.instruction).multilineTextAlignment(.center).modifier(CustomText())
+                    Spacer()
+                    Button("Start Game"){startGame(&session)} .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).modifier(CustomText()).background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
                     Spacer()
                 }.padding()
             }
             
             
                 
-            if isPlaying {
+            if session.isPlaying {
                       
                 VStack{
                     Spacer()
@@ -82,7 +109,7 @@ struct ContentView: View {
                         VStack{
                             Text("Time Left")
                                 .modifier(CustomText())
-                            Text(String(12))
+                            Text(String(timeRemaining))
                                 .modifier(CustomText())
                         }
                         Spacer()
@@ -114,8 +141,7 @@ struct ContentView: View {
                         
                         
                         HStack{
-                            TextField("Input", text: $session.playerWord).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).onSubmit({submitInput(&session,&isPlaying)})
-                            Button("Submit", action: {submitInput(&session,&isPlaying)})
+                            TextField("Input", text: $session.playerWord).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).onSubmit({submitInput(&session,validator)})
                         }
                         
                         
