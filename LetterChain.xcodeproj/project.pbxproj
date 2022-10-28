@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9E73FCC290BBE3900CF234A /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E73FCB290BBE3900CF234A /* GameLogic.swift */; };
 		D9F23577290ABB16009D3678 /* LetterChainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F23576290ABB16009D3678 /* LetterChainApp.swift */; };
 		D9F23579290ABB16009D3678 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F23578290ABB16009D3678 /* ContentView.swift */; };
 		D9F2357B290ABB17009D3678 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9F2357A290ABB17009D3678 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		D9172CFC290ACA7F00581FE4 /* WireFrames.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WireFrames.png; sourceTree = "<group>"; };
+		D9E73FCB290BBE3900CF234A /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
 		D9F23573290ABB16009D3678 /* LetterChain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LetterChain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9F23576290ABB16009D3678 /* LetterChainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterChainApp.swift; sourceTree = "<group>"; };
 		D9F23578290ABB16009D3678 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				D9F235A1290AC672009D3678 /* logic.swift */,
 				D9F23576290ABB16009D3678 /* LetterChainApp.swift */,
 				D9F23578290ABB16009D3678 /* ContentView.swift */,
+				D9E73FCB290BBE3900CF234A /* GameLogic.swift */,
 				D9172CFC290ACA7F00581FE4 /* WireFrames.png */,
 				D9F2357A290ABB17009D3678 /* Assets.xcassets */,
 				D9F2357C290ABB17009D3678 /* LetterChain.entitlements */,
@@ -271,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9E73FCC290BBE3900CF234A /* GameLogic.swift in Sources */,
 				D9F23579290ABB16009D3678 /* ContentView.swift in Sources */,
 				D9F23577290ABB16009D3678 /* LetterChainApp.swift in Sources */,
 			);
