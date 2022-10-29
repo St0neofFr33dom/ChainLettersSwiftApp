@@ -14,12 +14,20 @@ struct GameLogic{
         case wrongLetter
     }
     
+    enum GameState {
+        case title
+        case playing
+        case gameOver
+    }
+    
     
     var highScore: Int
     
    let wordsSelection: [String:Set<String>]
     
     let validator: WordValidator
+    
+    var gameState: GameState
     
     init(hiScore: Int) {
         var wordSet: Set<String> = []
@@ -42,6 +50,7 @@ struct GameLogic{
         
         highScore = hiScore
         validator = WordValidator()
+        gameState = .title
     }
     
     var playerScore: Int = 0
@@ -53,13 +62,13 @@ struct GameLogic{
     
     var previousWords: Set<String> = []
     var instruction: String = "Press the button below to begin"
-    var isPlaying: Bool = false
+    
     
     mutating func startGame(){
         
         resetGame()
         getRandomWord()
-        isPlaying = true
+        gameState = .playing
 
     }
     
@@ -100,7 +109,7 @@ struct GameLogic{
         case .wrongLetter:
             instruction = "This word does not begin with the last letter of the previous word"
         }
-        isPlaying = false
+        gameState = .gameOver
     }
     
     private mutating func getRandomWord() {

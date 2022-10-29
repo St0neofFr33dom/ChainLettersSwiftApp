@@ -36,7 +36,7 @@ struct ContentView: View {
         
         
             
-        if session.isPlaying == false{
+        if session.gameState == .title{
             ZStack{
                 
                 LinearGradient(gradient: Gradient(colors: [Color("Top"), Color("Bottom")]), startPoint: /*@START_MENU_TOKEN@*/.top/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
@@ -61,7 +61,7 @@ struct ContentView: View {
             
             
                 
-        if session.isPlaying {
+        if session.gameState == .playing {
             ZStack{
                 Rectangle().foregroundColor(Color.blue)
                 //                    Spacer()
@@ -133,6 +133,41 @@ struct ContentView: View {
                     }
                 }.onDisappear{updateHighScore()}
             }
+        
+        if session.gameState == .gameOver{
+            ZStack{
+                Rectangle().foregroundColor(Color.blue)
+                VStack{
+                    Spacer()
+                    Text("Game Over")
+                        .modifier(CustomText())
+                        .font(.system(size: 48))
+                    Spacer()
+                    Text(session.instruction)
+                        .multilineTextAlignment(.center)
+                        .modifier(CustomText())
+                        .font(.system(size: 32))
+                    Spacer()
+                    VStack(alignment: .center, spacing: 40.0){
+                        Text("Your score was: " + String(session.playerScore)).modifier(CustomText())
+                            .font(.system(size: 24))
+                        if session.playerScore > highScoreSave{
+                            Text("Congratulations! You got a new High Score!").modifier(CustomText())
+                        }
+                        Text("High Score: " + String(session.highScore)).modifier(CustomText())
+                            .font(.system(size: 24))
+                    }
+                    Spacer()
+                    Button("Restart", action: {session.startGame()})
+                        .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                        .background(RoundedRectangle(cornerRadius: 20).foregroundColor(Color.black))
+                        .modifier(CustomText())
+                        .font(.system(size: 36))
+                    Spacer()
+                }
+            }
+        }
+        
         }
         }
 
@@ -144,7 +179,7 @@ struct ContentView_Previews: PreviewProvider {
     
     static var exampleSession: GameLogic {
         var session = GameLogic(hiScore: 0)
-        session.startGame()
+        session.gameState = .gameOver
         return session
     }
 }
