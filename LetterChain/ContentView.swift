@@ -83,11 +83,22 @@ struct ContentView: View {
 //                        Text(session.startingLetter)
 //                            .modifier(CustomText())
 //                            .font(.system(size: 64))
-                        HStack{
-                            ForEach(session.chainedWords, id: \.self){
-                                chain in
-                                Text(chain)
+                        
+                            ScrollView(.horizontal,showsIndicators: false){
+                                ScrollViewReader { value in
+                                HStack(alignment: .bottom){
+                                    ForEach(session.chainedWords, id: \.id){
+                                        chain in
+                                        Text(chain.word)
+                                            .font(.title)
+                                            .lineLimit(1)
+                                        Text("\u{1F517}")
+                                            .font(.title)
+                                    }.onChange(of: session.chainedWords){_ in value.scrollTo(session.chainedWords.last?.id, anchor: .bottom)}
+                                }
                             }
+                            
+                       
                         }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color.yellow)
                         VStack{
                             TextField("\(session.startingLetter)...", text: $userInput)
@@ -134,10 +145,14 @@ struct ContentView: View {
                         Text("Your score was: " + String(session.playerScore)).modifier(CustomText())
                             .font(.system(size: 24))
                         if session.playerScore > highScoreSave{
-                            Text("Congratulations! You got a new High Score!").modifier(CustomText())
+                            Text("Congratulations! \n You got a new High Score!")
+                                .multilineTextAlignment(.center)
+                                .modifier(CustomText())
+                                .font(.system(size: 24))
+                        } else{
+                            Text("High Score: " + String(session.highScore)).modifier(CustomText())
+                                .font(.system(size: 24))
                         }
-                        Text("High Score: " + String(session.highScore)).modifier(CustomText())
-                            .font(.system(size: 24))
                     }
                     Spacer()
                     Button("Restart", action: {session.startGame()})
@@ -162,6 +177,7 @@ struct ContentView_Previews: PreviewProvider {
     static var exampleSession: GameLogic {
         var session = GameLogic(hiScore: 0)
         session.startGame()
+//        session.gameState = .gameOver
         return session
     }
 }

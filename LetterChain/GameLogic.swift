@@ -62,7 +62,16 @@ struct GameLogic{
     
     var previousWords: Set<String> = []
     
-    var chainedWords: [String] = []
+    struct Entry: Equatable{
+        let id = UUID()
+        
+        let word: String
+        init(input:String){
+            word = input
+        }
+    }
+    
+    var chainedWords: [Entry] = []
     var instruction: String = "Press the button below to begin"
     
     
@@ -105,11 +114,11 @@ struct GameLogic{
         }
         switch(condition){
         case .invalid:
-            instruction = "The word inputted cannot be found in our dictionary"
+            instruction = "Your word could not be found in our dictionary"
         case .repeated:
-            instruction = "The word has already been used"
+            instruction = "Your word has already been used"
         case .wrongLetter:
-            instruction = "This word does not begin with the last letter of the previous word"
+            instruction = "Your word did not chain off of the previous word"
         }
         gameState = .gameOver
     }
@@ -137,14 +146,14 @@ struct GameLogic{
 
     private mutating func recordWord(word:String) {
       previousWords.insert(word)
-        chainedWords.append(word)
+        chainedWords.append(Entry(input:word))
         if chainedWords.count > 5{
             chainedWords.removeFirst()
         }
     }
     
     private mutating func incrementScore() {
-      return playerScore += 1
+        playerScore += 1
     }
     
     private mutating func newRound() {
@@ -153,15 +162,14 @@ struct GameLogic{
         getNewWord()
         playerWord = ""
         instruction = "Type in a word that begins with the letter \n"
-        return
     }
   
     private mutating func resetGame() {
-      playerScore = 0
-      previousWords.removeAll()
-      computerWord = ""
+        playerScore = 0
+        previousWords.removeAll()
+        chainedWords.removeAll()
+        computerWord = ""
         playerWord = ""
-      return
     }
 
     private mutating func validateInput() -> Bool{
