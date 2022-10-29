@@ -64,47 +64,31 @@ struct ContentView: View {
         if session.gameState == .playing {
             ZStack{
                 Rectangle().foregroundColor(Color.blue)
-                //                    Spacer()
-                //                    HStack(alignment: .top){
-                //                        VStack{
-                //                            Text("Time Left")
-                //                                .modifier(CustomText())
-                //                            Text(String(timeRemaining))
-                //                                .modifier(CustomText())
-                //                        }
-                //                        Spacer()
-                //                        VStack{
-                //                            Text("Score")
-                //                                .modifier(CustomText())
-                //                            Text(String(session.playerScore))
-                //                                .modifier(CustomText())
-                //                        }
-                //                    }
-                //                    .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                //
-                //                    Spacer()
+
+                
                     VStack {
-                        Spacer()
                         VStack{
                             Text("Opponent's Word").modifier(CustomText())
                             Text(session.computerWord)
                                 .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                                 .modifier(CustomText())
                                 .background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
-                        }
+                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color.blue)
                         
                         
-                                                Spacer()
-                                                Text(session.instruction).modifier(CustomText())
-                                                    .multilineTextAlignment(.center)
-                                                    .lineSpacing(/*@START_MENU_TOKEN@*/5.0/*@END_MENU_TOKEN@*/)
-                                                Text(session.startingLetter)
-                                                    .modifier(CustomText())
-                                                    .font(.system(size: 64))
-                        
-                        
-                        
-                        
+//                        Spacer()
+//                        Text(session.instruction).modifier(CustomText())
+//                            .multilineTextAlignment(.center)
+//                            .lineSpacing(5)
+//                        Text(session.startingLetter)
+//                            .modifier(CustomText())
+//                            .font(.system(size: 64))
+                        HStack{
+                            ForEach(session.chainedWords, id: \.self){
+                                chain in
+                                Text(chain)
+                            }
+                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color.yellow)
                         VStack{
                             TextField("\(session.startingLetter)...", text: $userInput)
                                 .textInputAutocapitalization(.characters)
@@ -126,10 +110,8 @@ struct ContentView: View {
                             Button("Submit", action: {session.submitInput(userInput)
                                 userInput = ""
                                 self.inputInFocus = true})
-                        }
-                        
-                        
-                        Spacer()
+                            .modifier(CustomText())
+                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color.blue)
                     }
                 }.onDisappear{updateHighScore()}
             }
@@ -179,7 +161,7 @@ struct ContentView_Previews: PreviewProvider {
     
     static var exampleSession: GameLogic {
         var session = GameLogic(hiScore: 0)
-        session.gameState = .gameOver
+        session.startGame()
         return session
     }
 }

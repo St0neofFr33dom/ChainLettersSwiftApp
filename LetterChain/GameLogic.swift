@@ -61,13 +61,17 @@ struct GameLogic{
     }
     
     var previousWords: Set<String> = []
+    
+    var chainedWords: [String] = []
     var instruction: String = "Press the button below to begin"
+    
+    
     
     
     mutating func startGame(){
         
         resetGame()
-        getRandomWord()
+        getNewWord()
         gameState = .playing
 
     }
@@ -82,8 +86,6 @@ struct GameLogic{
             gameOver( .invalid)
             return
         }
-        
-        playerWord = playerWord.capitalized
         
         let firstLetter = String(playerWord[playerWord.startIndex])
         
@@ -112,25 +114,33 @@ struct GameLogic{
         gameState = .gameOver
     }
     
-    private mutating func getRandomWord() {
-      let selection = wordsSelection.randomElement()?.value
-        computerWord = selection?.randomElement() ?? "Default"
-        instruction = "Type in a word that begins with the letter \n"
-      return
-    }
-
 
     private mutating func getNewWord() {
-      let lastLetter = playerWord.uppercased()[playerWord.index(before: playerWord.endIndex)]
-      let newWords = wordsSelection[String(lastLetter)]
-      computerWord = newWords?.randomElement() ?? "Default"
-        instruction = "Type in a word that begins with the letter \n"
-      return
+        let newWords: Set<String>?
+        if playerWord == ""{
+            newWords = wordsSelection.randomElement()?.value
+        }
+        else{
+            let lastLetter = playerWord.uppercased()[playerWord.index(before: playerWord.endIndex)]
+            newWords = wordsSelection[String(lastLetter)]
+        }
+        while true {
+            let selection = newWords?.randomElement() ?? "Default"
+            if previousWords.contains(selection) == false{
+                computerWord = selection
+                instruction = "Type in a word that begins with the letter \n"
+                recordWord(word: computerWord)
+                break
+            }
+        }
     }
 
-    private mutating func recordWord() {
-      previousWords.insert(playerWord)
-      return
+    private mutating func recordWord(word:String) {
+      previousWords.insert(word)
+        chainedWords.append(word)
+        if chainedWords.count > 5{
+            chainedWords.removeFirst()
+        }
     }
     
     private mutating func incrementScore() {
@@ -139,7 +149,7 @@ struct GameLogic{
     
     private mutating func newRound() {
         incrementScore()
-        recordWord()
+        recordWord(word:playerWord)
         getNewWord()
         playerWord = ""
         instruction = "Type in a word that begins with the letter \n"
