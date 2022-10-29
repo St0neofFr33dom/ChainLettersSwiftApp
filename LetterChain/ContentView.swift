@@ -13,18 +13,12 @@ struct CustomText : ViewModifier {
         }
 }
 
-
-
-
-
 struct ContentView: View {
     
-    @State var timeRemaining = 15
-//    let timer = Timer.publish(every: 1, on : .main, in: .common).autoconnect()
-    
+
     @State var userInput: String = ""
     
-    @State var session = GameLogic(hiScore: highScoreSave)
+    @State var session: GameLogic
     
     @FocusState var inputInFocus: Bool
     
@@ -34,15 +28,19 @@ struct ContentView: View {
         }
     }
     
+    init(session: GameLogic = GameLogic(hiScore: highScoreSave)) {
+        self.session = session
+    }
 
     var body: some View {
         
-        ZStack{
+        
             
-            LinearGradient(gradient: Gradient(colors: [Color("Top"), Color("Bottom")]), startPoint: /*@START_MENU_TOKEN@*/.top/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
-                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-            
-            if session.isPlaying == false{
+        if session.isPlaying == false{
+            ZStack{
+                
+                LinearGradient(gradient: Gradient(colors: [Color("Top"), Color("Bottom")]), startPoint: /*@START_MENU_TOKEN@*/.top/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
+                    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 VStack {
                     Spacer()
                     Text("Welcome To").modifier(CustomText())
@@ -52,65 +50,82 @@ struct ContentView: View {
                         .modifier(CustomText())
                     Spacer()
                     Text("Hi-Score: " + String(session.highScore)).modifier(CustomText())
-                    Spacer()
-                    Text(session.instruction).multilineTextAlignment(.center).modifier(CustomText())
+                    //                    Spacer()
+                    //                    Text(session.instruction).multilineTextAlignment(.center).modifier(CustomText())
                     Spacer()
                     Button("Start Game"){session.startGame()} .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).modifier(CustomText()).background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
                     Spacer()
                 }.padding()
             }
+        }
             
             
                 
-            if session.isPlaying {
-                      
-                VStack{
-                    Spacer()
-                    HStack(alignment: .top){
-                        VStack{
-                            Text("Time Left")
-                                .modifier(CustomText())
-                            Text(String(timeRemaining))
-                                .modifier(CustomText())
-                        }
-                        Spacer()
-                        VStack{
-                            Text("Score")
-                                .modifier(CustomText())
-                            Text(String(session.playerScore))
-                                .modifier(CustomText())
-                        }
-                    }
-                    .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                    
-                    Spacer()
-                    
+        if session.isPlaying {
+            ZStack{
+                Rectangle().foregroundColor(Color.blue)
+                //                    Spacer()
+                //                    HStack(alignment: .top){
+                //                        VStack{
+                //                            Text("Time Left")
+                //                                .modifier(CustomText())
+                //                            Text(String(timeRemaining))
+                //                                .modifier(CustomText())
+                //                        }
+                //                        Spacer()
+                //                        VStack{
+                //                            Text("Score")
+                //                                .modifier(CustomText())
+                //                            Text(String(session.playerScore))
+                //                                .modifier(CustomText())
+                //                        }
+                //                    }
+                //                    .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                //
+                //                    Spacer()
                     VStack {
                         Spacer()
-                        Text("Computer's Word").modifier(CustomText())
-                        Text(session.computerWord)
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .modifier(CustomText())
-                            .background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
-                        Spacer()
-                        Text(session.instruction).modifier(CustomText())
-                            .multilineTextAlignment(.center)
-                            .lineSpacing(/*@START_MENU_TOKEN@*/5.0/*@END_MENU_TOKEN@*/)
+                        VStack{
+                            Text("Opponent's Word").modifier(CustomText())
+                            Text(session.computerWord)
+                                .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                                .modifier(CustomText())
+                                .background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
+                        }
                         
                         
-                        Spacer()
+                                                Spacer()
+                                                Text(session.instruction).modifier(CustomText())
+                                                    .multilineTextAlignment(.center)
+                                                    .lineSpacing(/*@START_MENU_TOKEN@*/5.0/*@END_MENU_TOKEN@*/)
+                                                Text(session.startingLetter)
+                                                    .modifier(CustomText())
+                                                    .font(.system(size: 64))
                         
                         
-                        HStack{
-                            TextField("Input", text: $userInput).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).onSubmit({
-                                session.submitInput(userInput)
-                                userInput = ""
-                                self.inputInFocus = true
-                            }).autocorrectionDisabled().focused($inputInFocus).onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                  self.inputInFocus = true
+                        
+                        
+                        VStack{
+                            TextField("\(session.startingLetter)...", text: $userInput)
+                                .textInputAutocapitalization(.characters)
+                                .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                                .onSubmit({
+                                    session.submitInput(userInput)
+                                    userInput = ""
+                                    self.inputInFocus = true
+                                })
+                                .font(.system(size: 48))
+                                .multilineTextAlignment(.center)
+                                .autocorrectionDisabled()
+                                .focused($inputInFocus)
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                        self.inputInFocus = true
+                                    }
                                 }
-                              }
+                            Button("Submit", action: {session.submitInput(userInput)
+                                userInput = ""
+                                self.inputInFocus = true})
                         }
                         
                         
@@ -118,14 +133,18 @@ struct ContentView: View {
                     }
                 }.onDisappear{updateHighScore()}
             }
-                
-            }
         }
-    }
+        }
 
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(session: exampleSession)
+    }
+    
+    static var exampleSession: GameLogic {
+        var session = GameLogic(hiScore: 0)
+        session.startGame()
+        return session
     }
 }

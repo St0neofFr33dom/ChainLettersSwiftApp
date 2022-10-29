@@ -26,7 +26,7 @@ struct GameLogic{
         let path = Bundle.main.path(forResource: "computerWords", ofType: "txt")
         do {
             let text = try String(contentsOfFile: path!)
-            wordSet = Set(text.components(separatedBy: "\n").map { $0.trimmingCharacters(in: .whitespacesAndNewlines)})
+            wordSet = Set(text.components(separatedBy: "\n").map { $0.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()})
         }
         catch(_){
             print("error")
@@ -47,7 +47,10 @@ struct GameLogic{
     var playerScore: Int = 0
     var computerWord: String = ""
     var playerWord: String = ""
-    var startingLetter: String = ""
+    var startingLetter: String {
+        String(computerWord[computerWord.index(before: computerWord.endIndex)])
+    }
+    
     var previousWords: Set<String> = []
     var instruction: String = "Press the button below to begin"
     var isPlaying: Bool = false
@@ -102,9 +105,8 @@ struct GameLogic{
     
     private mutating func getRandomWord() {
       let selection = wordsSelection.randomElement()?.value
-        computerWord = selection?.randomElement()?.capitalized ?? "Default"
-      startingLetter = String(computerWord.uppercased()[computerWord.index(before: computerWord.endIndex)])
-        instruction = "Type in a word that begins with the letter \n" + String(startingLetter)
+        computerWord = selection?.randomElement() ?? "Default"
+        instruction = "Type in a word that begins with the letter \n"
       return
     }
 
@@ -113,8 +115,7 @@ struct GameLogic{
       let lastLetter = playerWord.uppercased()[playerWord.index(before: playerWord.endIndex)]
       let newWords = wordsSelection[String(lastLetter)]
       computerWord = newWords?.randomElement() ?? "Default"
-      startingLetter = String(computerWord.uppercased()[computerWord.index(before: computerWord.endIndex)])
-        instruction = "Type in a word that begins with the letter \n" + startingLetter
+        instruction = "Type in a word that begins with the letter \n"
       return
     }
 
@@ -132,7 +133,7 @@ struct GameLogic{
         recordWord()
         getNewWord()
         playerWord = ""
-        instruction = "Type in a word that begins with the letter \n" + String(startingLetter)
+        instruction = "Type in a word that begins with the letter \n"
         return
     }
   
