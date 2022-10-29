@@ -47,6 +47,32 @@ final class GameLogicTest: XCTestCase {
         XCTAssert(gameLogic.previousWords.contains("Tea"))
         XCTAssertEqual(gameLogic.isPlaying, true)
     }
+    
+    func testInvalidWord() throws{
+        gameLogic.startGame()
+        gameLogic.computerWord = "World"
+        gameLogic.startingLetter = "D"
+        gameLogic.submitInput("Doog")
+        XCTAssertEqual(gameLogic.playerScore, 0)
+        XCTAssertEqual(gameLogic.instruction,"The word inputted cannot be found in our dictionary")
+        XCTAssertEqual(gameLogic.isPlaying, false)
+    }
+    
+    func testRepeatedWord() throws{
+        gameLogic.startGame()
+        gameLogic.computerWord = "Tins"
+        gameLogic.startingLetter = "S"
+        gameLogic.submitInput("Seal")
+        XCTAssertEqual(gameLogic.playerScore, 1)
+        XCTAssert(gameLogic.previousWords.contains("Seal"))
+        XCTAssertEqual(gameLogic.isPlaying, true)
+        gameLogic.computerWord = "Loss"
+        gameLogic.startingLetter = "S"
+        gameLogic.submitInput("Seal")
+        XCTAssertEqual(gameLogic.playerScore, 1)
+        XCTAssertEqual(gameLogic.instruction,"The word has already been used")
+        XCTAssertEqual(gameLogic.isPlaying, false)
+    }
 
 
 }
