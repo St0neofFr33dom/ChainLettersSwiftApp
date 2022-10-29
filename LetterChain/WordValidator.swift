@@ -9,7 +9,7 @@ import Foundation
 
 struct WordValidator{
     
-    var allWords: Set<String>
+    let allWords: Set<String>
     init(){
         let path = Bundle.main.path(forResource: "allWords", ofType: "txt")
         do {

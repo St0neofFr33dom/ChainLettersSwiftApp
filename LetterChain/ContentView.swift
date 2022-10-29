@@ -16,64 +16,25 @@ struct CustomText : ViewModifier {
 
 
 
-func startGame(_ state: inout GameLogic) -> Void{
-    
-    state.resetGame()
-    state.getRandomWord()
-    state.isPlaying = true
-    
-    return
-
-}
-
-func submitInput(_ state: inout GameLogic, _ validator: WordValidator) -> Void{
-    guard state.validateInput() == true else {
-        return
-    }
-    
-    guard validator.validateInput(state.playerWord) == true else{
-        gameOver(&state,  "invalid")
-        return
-    }
-    
-    state.capitaliseWord()
-    
-    let firstLetter = String(state.playerWord[state.playerWord.startIndex])
-    
-    if firstLetter != state.startingLetter{
-        gameOver(&state,  "wrongLetter")
-
-    } else if state.previousWords.contains(state.playerWord) == true{
-        gameOver(&state, "invalid")
-    } else {
-        state.newRound()
-    }
-}
-
-func gameOver(_ state:inout GameLogic,  _ condition: String){
-    if state.playerScore > state.highScore{
-        state.updateHighScore()
-    }
-    state.gameOver(condition)
-    state.isPlaying = false
-}
-
-func getRandomWord(_ validator: WordValidator)-> String{
-    return validator.allWords.randomElement()!
-}
 
 struct ContentView: View {
     
     @State var timeRemaining = 15
-    let timer = Timer.publish(every: 1, on : .main, in: .common).autoconnect()
+//    let timer = Timer.publish(every: 1, on : .main, in: .common).autoconnect()
+    
+    @State var userInput: String = ""
+    
+    @State var session = GameLogic(hiScore: highScoreSave)
+    
+    @FocusState var inputInFocus: Bool
+    
+    func updateHighScore(){
+        if session.highScore > highScoreSave{
+            userDefaults.set(session.highScore, forKey: "highScore")
+        }
+    }
     
 
-    
-    @State var session = GameLogic()
-    
-
-    let validator = WordValidator()
-    
     var body: some View {
         
         ZStack{
@@ -94,7 +55,7 @@ struct ContentView: View {
                     Spacer()
                     Text(session.instruction).multilineTextAlignment(.center).modifier(CustomText())
                     Spacer()
-                    Button("Start Game"){startGame(&session)} .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).modifier(CustomText()).background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
+                    Button("Start Game"){session.startGame()} .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).modifier(CustomText()).background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
                     Spacer()
                 }.padding()
             }
@@ -141,13 +102,21 @@ struct ContentView: View {
                         
                         
                         HStack{
-                            TextField("Input", text: $session.playerWord).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).onSubmit({submitInput(&session,validator)})
+                            TextField("Input", text: $userInput).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).onSubmit({
+                                session.submitInput(userInput)
+                                userInput = ""
+                                self.inputInFocus = true
+                            }).autocorrectionDisabled().focused($inputInFocus).onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                  self.inputInFocus = true
+                                }
+                              }
                         }
                         
                         
                         Spacer()
                     }
-                }
+                }.onDisappear{updateHighScore()}
             }
                 
             }

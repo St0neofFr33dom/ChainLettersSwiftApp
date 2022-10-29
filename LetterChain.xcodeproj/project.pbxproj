@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D916D9AB290D1DB9007BFDEF /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E73FCB290BBE3900CF234A /* GameLogic.swift */; };
+		D916D9AC290D1E33007BFDEF /* WordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E73FD9290C186400CF234A /* WordValidator.swift */; };
+		D916D9AE290D21CA007BFDEF /* ValidatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D916D9AD290D21CA007BFDEF /* ValidatorTest.swift */; };
+		D916D9B1290D2A34007BFDEF /* GameLogicTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D916D9AF290D21FB007BFDEF /* GameLogicTest.swift */; };
 		D9E73FCC290BBE3900CF234A /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E73FCB290BBE3900CF234A /* GameLogic.swift */; };
 		D9E73FD8290C183500CF234A /* allWords.txt in Resources */ = {isa = PBXBuildFile; fileRef = D9E73FD7290C183500CF234A /* allWords.txt */; };
 		D9E73FDA290C186400CF234A /* WordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E73FD9290C186400CF234A /* WordValidator.swift */; };
@@ -39,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D916D9AD290D21CA007BFDEF /* ValidatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorTest.swift; sourceTree = "<group>"; };
+		D916D9AF290D21FB007BFDEF /* GameLogicTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogicTest.swift; sourceTree = "<group>"; };
 		D9172CFC290ACA7F00581FE4 /* WireFrames.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WireFrames.png; sourceTree = "<group>"; };
 		D9E73FCB290BBE3900CF234A /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
 		D9E73FCD290BE6DB00CF234A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -145,6 +151,8 @@
 			isa = PBXGroup;
 			children = (
 				D9F23588290ABB17009D3678 /* LetterChainTests.swift */,
+				D916D9AD290D21CA007BFDEF /* ValidatorTest.swift */,
+				D916D9AF290D21FB007BFDEF /* GameLogicTest.swift */,
 			);
 			path = LetterChainTests;
 			sourceTree = "<group>";
@@ -302,7 +310,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D916D9AE290D21CA007BFDEF /* ValidatorTest.swift in Sources */,
+				D916D9AC290D1E33007BFDEF /* WordValidator.swift in Sources */,
+				D916D9AB290D1DB9007BFDEF /* GameLogic.swift in Sources */,
 				D9F23589290ABB17009D3678 /* LetterChainTests.swift in Sources */,
+				D916D9B1290D2A34007BFDEF /* GameLogicTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

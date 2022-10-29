@@ -7,12 +7,21 @@
 
 import Foundation
 
-
-
-
 struct GameLogic{
+    enum GameOverReason {
+        case invalid
+        case repeated
+        case wrongLetter
+    }
+    
+    
+    var highScore: Int
+    
    let wordsSelection: [String:Set<String>]
-    init() {
+    
+    let validator: WordValidator
+    
+    init(hiScore: Int) {
         var wordSet: Set<String> = []
         let path = Bundle.main.path(forResource: "computerWords", ofType: "txt")
         do {
@@ -31,46 +40,76 @@ struct GameLogic{
             }
         }
         
-        highScore = highScoreSave
+        highScore = hiScore
+        validator = WordValidator()
     }
     
     var playerScore: Int = 0
     var computerWord: String = ""
     var playerWord: String = ""
-    var startingLetter: String = "T"
-    
-    var highScore: Int
-
+    var startingLetter: String = ""
     var previousWords: Set<String> = []
-
     var instruction: String = "Press the button below to begin"
-    
     var isPlaying: Bool = false
     
-    mutating func getRandomWord() {
+    mutating func startGame(){
+        
+        resetGame()
+        getRandomWord()
+        isPlaying = true
+
+    }
+    
+    mutating func submitInput(_ userInput:String) -> Void{
+        playerWord = userInput
+        guard validateInput() == true else {
+            return
+        }
+        
+        guard validator.validateInput(playerWord) == true else{
+            gameOver( .invalid)
+            return
+        }
+        
+        playerWord = playerWord.capitalized
+        
+        let firstLetter = String(playerWord[playerWord.startIndex])
+        
+        if firstLetter != startingLetter{
+            gameOver(  .wrongLetter)
+
+        } else if previousWords.contains(playerWord) == true{
+            gameOver( .repeated)
+        } else {
+            newRound()
+        }
+    }
+
+    mutating func gameOver(  _ condition: GameOverReason){
+        if playerScore > highScore{
+            highScore = playerScore
+        }
+        switch(condition){
+        case .invalid:
+            instruction = "The word inputted cannot be found in our dictionary"
+        case .repeated:
+            instruction = "The word has already been used"
+        case .wrongLetter:
+            instruction = "This word does not begin with the last letter of the previous word"
+        }
+        isPlaying = false
+    }
+    
+    private mutating func getRandomWord() {
       let selection = wordsSelection.randomElement()?.value
-      computerWord = selection?.randomElement() ?? "Default"
+        computerWord = selection?.randomElement()?.capitalized ?? "Default"
       startingLetter = String(computerWord.uppercased()[computerWord.index(before: computerWord.endIndex)])
         instruction = "Type in a word that begins with the letter \n" + String(startingLetter)
       return
     }
 
-    mutating func updateHighScore(){
-        userDefaults.set(playerScore, forKey: "highScore")
-        highScore = playerScore
-    }
 
-    mutating func capitaliseWord() {
-      //Prevents player repeating words with different casing
-      var lowercaseWord = playerWord.lowercased()
-      lowercaseWord.removeFirst()
-      let firstLetter = playerWord.uppercased()[playerWord.startIndex]
-      lowercaseWord.insert(firstLetter,at:lowercaseWord.startIndex)
-      return playerWord = lowercaseWord
-
-    }
-
-    mutating func getNewWord() {
+    private mutating func getNewWord() {
       let lastLetter = playerWord.uppercased()[playerWord.index(before: playerWord.endIndex)]
       let newWords = wordsSelection[String(lastLetter)]
       computerWord = newWords?.randomElement() ?? "Default"
@@ -79,16 +118,16 @@ struct GameLogic{
       return
     }
 
-    mutating func recordWord() {
+    private mutating func recordWord() {
       previousWords.insert(playerWord)
       return
     }
     
-    mutating func incrementScore() {
+    private mutating func incrementScore() {
       return playerScore += 1
     }
     
-    mutating func newRound() {
+    private mutating func newRound() {
         incrementScore()
         recordWord()
         getNewWord()
@@ -96,22 +135,8 @@ struct GameLogic{
         instruction = "Type in a word that begins with the letter \n" + String(startingLetter)
         return
     }
-    
-    mutating func gameOver(_ condition:String){
-        switch(condition){
-            case "invalid":
-                instruction = "The word inputted cannot be found in our dictionary"
-            case "repeated":
-                instruction = "The word has already been used"
-            case "wrongLetter":
-                instruction = "This word does not begin with the last letter of the previous word"
-            default:
-                print("Invalid call to Game Over")
-        }
-        
-    }
-
-    mutating func resetGame() {
+  
+    private mutating func resetGame() {
       playerScore = 0
       previousWords.removeAll()
       computerWord = ""
@@ -119,7 +144,7 @@ struct GameLogic{
       return
     }
 
-    mutating func validateInput() -> Bool{
+    private mutating func validateInput() -> Bool{
       guard playerWord.allSatisfy({$0.isWholeNumber == false}) == true else {
       instruction = "Please don't type numbers"
       return false
