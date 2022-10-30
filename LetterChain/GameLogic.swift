@@ -92,10 +92,7 @@ struct GameLogic{
     }
     
     mutating func submitInput(_ userInput:String) -> Void{
-        playerWord = userInput.uppercased()
-        guard validateInput() == true else {
-            return
-        }
+        playerWord = userInput.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
         guard validator.validateInput(playerWord) == true else{
             gameOver( .invalid)
@@ -179,20 +176,5 @@ struct GameLogic{
         playerWord = ""
     }
     
-    private mutating func validateInput() -> Bool{
-        guard playerWord.allSatisfy({$0.isWholeNumber == false}) == true else {
-            instruction = "Please don't type numbers"
-            return false
-        }
-        guard playerWord.allSatisfy({$0 != " "}) == true else {
-            instruction = "Please omit any spaces, and type only one word"
-            return false
-        }
-        guard playerWord.count >= 3 else{
-            instruction = "Please input a word that is at least 3 letters long"
-            return false
-        }
-        return true
-    }
     
 }
