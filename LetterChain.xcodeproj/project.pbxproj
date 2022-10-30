@@ -52,7 +52,6 @@
 		D944CF8D290EBB86007F27B7 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		D944CF8F290EBBDC007F27B7 /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
 		D944CF91290EBD2A007F27B7 /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
-		D944CF93290ECD91007F27B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D9E73FCB290BBE3900CF234A /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
 		D9E73FCD290BE6DB00CF234A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D9E73FD7290C183500CF234A /* allWords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = allWords.txt; sourceTree = SOURCE_ROOT; };
@@ -131,7 +130,6 @@
 		D9F23575290ABB16009D3678 /* LetterChain */ = {
 			isa = PBXGroup;
 			children = (
-				D944CF93290ECD91007F27B7 /* Info.plist */,
 				D98C6D6C290B064F00F55B28 /* Fonts */,
 				D9F235A1290AC672009D3678 /* commandLineLogic.swift */,
 				D9F23576290ABB16009D3678 /* LetterChainApp.swift */,
