@@ -29,6 +29,8 @@ struct GameLogic{
     
     var gameState: GameState
     
+    var isComputerTurn: Bool = false
+    
     init(hiScore: Int) {
         var wordSet: Set<String> = []
         let path = Bundle.main.path(forResource: "computerWords", ofType: "txt")
@@ -57,7 +59,10 @@ struct GameLogic{
     var computerWord: String = ""
     var playerWord: String = ""
     var startingLetter: String {
-        String(computerWord[computerWord.index(before: computerWord.endIndex)])
+        guard isComputerTurn == false else{
+            return String(playerWord[playerWord.index(before: playerWord.endIndex)])
+        }
+       return String(computerWord[computerWord.index(before: computerWord.endIndex)])
     }
     
     var previousWords: Set<String> = []
@@ -81,6 +86,7 @@ struct GameLogic{
         
         resetGame()
         getNewWord()
+        recordWord(word: computerWord)
         gameState = .playing
 
     }
@@ -104,7 +110,7 @@ struct GameLogic{
         } else if previousWords.contains(playerWord) == true{
             gameOver( .repeated)
         } else {
-            newRound()
+  newRound()
         }
     }
 
@@ -133,12 +139,11 @@ struct GameLogic{
             let lastLetter = playerWord.uppercased()[playerWord.index(before: playerWord.endIndex)]
             newWords = wordsSelection[String(lastLetter)]
         }
+        
         while true {
             let selection = newWords?.randomElement() ?? "Default"
             if previousWords.contains(selection) == false{
                 computerWord = selection
-                instruction = "Type in a word that begins with the letter \n"
-                recordWord(word: computerWord)
                 break
             }
         }
@@ -160,8 +165,13 @@ struct GameLogic{
         incrementScore()
         recordWord(word:playerWord)
         getNewWord()
+        isComputerTurn = true
+    }
+    
+    mutating func takeComputerTurn(){
+        recordWord(word: computerWord)
+        isComputerTurn = false
         playerWord = ""
-        instruction = "Type in a word that begins with the letter \n"
     }
   
     private mutating func resetGame() {

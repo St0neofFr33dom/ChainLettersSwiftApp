@@ -73,8 +73,9 @@ struct ContentView: View {
                                 .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                                 .modifier(CustomText())
                                 .font(.system(size: 36))
-                                .animation(.easeOut(duration: 1),value:session.computerWord)
+                                .animation(.linear(duration: 0.5).delay(1),value:session.computerWord)
                         }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color("Top"))
+                            
                         
                         
 //                        Spacer()
@@ -86,7 +87,7 @@ struct ContentView: View {
 //                            .font(.system(size: 64))
                         ScrollViewReader { value in
                             ScrollView(.horizontal,showsIndicators: false){
-                                    HStack(alignment:.center){
+                                HStack(alignment:.center){
                                     ForEach(session.chainedWords, id: \.id){
                                         chain in
                                         Text(chain.word)
@@ -96,10 +97,18 @@ struct ContentView: View {
                                         Text("\u{1F517}")
                                             .font(.title)
                                     }.onChange(of: session.chainedWords){_ in
-                                        withAnimation(Animation.easeIn(duration: 5)){
-                                            value.scrollTo("lastLetter", anchor: .trailing)}}
+                                        withAnimation {
+                                            value.scrollTo("lastLetter", anchor: .trailing)}
+                                        if session.isComputerTurn {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                session.takeComputerTurn()
+                                                inputInFocus = true
+                                            }
+                                        }
+                                    }
+                                    
                                     Text(session.startingLetter)
-                                            .id("lastLetter")
+                                        .id("lastLetter")
                                             .font(.title).foregroundColor(Color("HighlightText"))
                                     }
                                     .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
@@ -111,6 +120,7 @@ struct ContentView: View {
                         VStack{
                             TextField("\(session.startingLetter)...", text: $userInput)
                                 .textInputAutocapitalization(.characters)
+                                .disabled(session.isComputerTurn)
                                 .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                                 .onSubmit({
                                     session.submitInput(userInput)
