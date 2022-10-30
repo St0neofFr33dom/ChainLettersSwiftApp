@@ -9,6 +9,8 @@ import SwiftUI
 
 struct GameOverView: View {
     
+    @Environment(\.verticalSizeClass) var sizeClass
+    
     @Binding var session: GameLogic
     
     @State var gameOver = false
@@ -44,37 +46,74 @@ struct GameOverView: View {
                 }.animation(.default.delay(1),value:gameOver)
                 
                 Spacer()
-                
-                VStack(alignment: .center, spacing: 40.0){
-                    if gameOver == true{
-                        VStack{
-                            Text("Score")
-                                .modifier(CustomText())
-                                .font(.system(size: 32))
-                            Text(String(session.playerScore))
-                                .modifier(CustomText())
-                                .font(.system(size:48))
-                        }.transition(.move(edge: .leading).combined(with: .opacity))
-                        if session.playerScore > highScoreSave{
-                            Text("Congratulations! \n You got a new High Score!")
-                                .multilineTextAlignment(.center)
-                                .modifier(CustomText())
-                                .font(.system(size: 32))
-                                .transition(.scale.combined(with: .opacity))
-                        } else{
+                if sizeClass == .regular{
+                    // || PORTRAIT ||
+                    VStack(alignment: .center, spacing: 40.0){
+                        if gameOver == true{
                             VStack{
-                                Text("High Score")
+                                Text("Score")
                                     .modifier(CustomText())
                                     .font(.system(size: 32))
-                                Text(String(session.highScore))
+                                Text(String(session.playerScore))
                                     .modifier(CustomText())
                                     .font(.system(size:48))
+                            }.transition(.move(edge: .leading).combined(with: .opacity))
+                            if session.playerScore > highScoreSave{
+                                Text("Congratulations! \n You got a new High Score!")
+                                    .multilineTextAlignment(.center)
+                                    .modifier(CustomText())
+                                    .font(.system(size: 32))
+                                    .transition(.scale.combined(with: .opacity))
+                            } else{
+                                VStack{
+                                    Text("High Score")
+                                        .modifier(CustomText())
+                                        .font(.system(size: 32))
+                                    Text(String(session.highScore))
+                                        .modifier(CustomText())
+                                        .font(.system(size:48))
                                     
-                            }.transition(.move(edge: .trailing).combined(with: .opacity))
+                                }.transition(.move(edge: .trailing).combined(with: .opacity))
+                            }
                         }
-                    }
-                }.animation(.default.delay(2), value:gameOver)
+                    }.animation(.default.delay(2), value:gameOver)
+                } else {
+                    // || LANDSCAPE ||
+                    HStack{
+                        if gameOver == true{
+                            VStack{
+                                Text("Score")
+                                    .modifier(CustomText())
+                                    .font(.system(size: 32))
+                                Text(String(session.playerScore))
+                                    .modifier(CustomText())
+                                    .font(.system(size:48))
+                                    .frame(maxWidth: 200)
+                            }.transition(.move(edge: .leading).combined(with: .opacity))
+                            Spacer()
+                            if session.playerScore > highScoreSave{
+                                Text("Congratulations! \n You got a new High Score!")
+                                    .multilineTextAlignment(.center)
+                                    .modifier(CustomText())
+                                    .font(.system(size: 32))
+                                    .transition(.scale.combined(with: .opacity))
+                            } else{
+                                VStack{
+                                    Text("High Score")
+                                        .modifier(CustomText())
+                                        .font(.system(size: 32))
+                                    Text(String(session.highScore))
+                                        .modifier(CustomText())
+                                        .font(.system(size:48))
+                                        .frame(maxWidth: 200)
+                                    
+                                }.transition(.move(edge: .trailing).combined(with: .opacity))
+                            }
+                        }
+                    }.animation(.default.delay(2), value:gameOver).frame(maxWidth: 500)
+                }
                 
+                // || END OF DIFFERENCES ||
                 Spacer()
                 
                 VStack{

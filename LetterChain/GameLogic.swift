@@ -92,7 +92,7 @@ struct GameLogic{
     }
     
     mutating func submitInput(_ userInput:String) -> Void{
-        playerWord = userInput
+        playerWord = userInput.uppercased()
         guard validateInput() == true else {
             return
         }
