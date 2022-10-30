@@ -147,9 +147,9 @@ struct GameLogic{
     private mutating func recordWord(word:String) {
       previousWords.insert(word)
         chainedWords.append(Entry(input:word))
-        if chainedWords.count > 5{
-            chainedWords.removeFirst()
-        }
+//        if chainedWords.count > 5{
+//            chainedWords.removeFirst()
+//        }
     }
     
     private mutating func incrementScore() {

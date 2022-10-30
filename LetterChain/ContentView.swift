@@ -72,8 +72,9 @@ struct ContentView: View {
                             Text(session.computerWord)
                                 .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                                 .modifier(CustomText())
-                                .background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color("Box")/*@END_MENU_TOKEN@*/)
-                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color.blue)
+                                .font(.system(size: 36))
+                                .animation(.easeOut(duration: 1),value:session.computerWord)
+                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color("Top"))
                         
                         
 //                        Spacer()
@@ -83,23 +84,30 @@ struct ContentView: View {
 //                        Text(session.startingLetter)
 //                            .modifier(CustomText())
 //                            .font(.system(size: 64))
-                        
+                        ScrollViewReader { value in
                             ScrollView(.horizontal,showsIndicators: false){
-                                ScrollViewReader { value in
-                                HStack(alignment: .bottom){
+                                    HStack(alignment:.center){
                                     ForEach(session.chainedWords, id: \.id){
                                         chain in
                                         Text(chain.word)
                                             .font(.title)
                                             .lineLimit(1)
+                                            .id(chain.id)
                                         Text("\u{1F517}")
                                             .font(.title)
-                                    }.onChange(of: session.chainedWords){_ in value.scrollTo(session.chainedWords.last?.id, anchor: .bottom)}
-                                }
-                            }
+                                    }.onChange(of: session.chainedWords){_ in
+                                        withAnimation(Animation.easeIn(duration: 5)){
+                                            value.scrollTo("lastLetter", anchor: .trailing)}}
+                                    Text(session.startingLetter)
+                                            .id("lastLetter")
+                                            .font(.title).foregroundColor(Color("HighlightText"))
+                                    }
+                                    .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                            }.disabled(true)
                             
                        
-                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color.yellow)
+                            }.frame(maxWidth:.infinity,maxHeight:200).background(Color("Bottom"))
+                            
                         VStack{
                             TextField("\(session.startingLetter)...", text: $userInput)
                                 .textInputAutocapitalization(.characters)
@@ -122,7 +130,7 @@ struct ContentView: View {
                                 userInput = ""
                                 self.inputInFocus = true})
                             .modifier(CustomText())
-                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color.blue)
+                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color("Top"))
                     }
                 }.onDisappear{updateHighScore()}
             }
