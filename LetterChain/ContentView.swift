@@ -13,21 +13,11 @@ struct CustomText : ViewModifier {
     }
 }
 
+
+
 struct ContentView: View {
     
-    
-    @State var userInput: String = ""
-    
     @State var session: GameLogic
-    
-    @FocusState var inputInFocus: Bool
-    @State var gameOver = false
-    
-    func updateHighScore(){
-        if session.highScore > highScoreSave{
-            userDefaults.set(session.highScore, forKey: "highScore")
-        }
-    }
     
     init(session: GameLogic = GameLogic(hiScore: highScoreSave)) {
         self.session = session
@@ -38,178 +28,17 @@ struct ContentView: View {
         ZStack{
             
             if session.gameState == .title{
-                ZStack{
-                    
-                    LinearGradient(gradient: Gradient(colors: [Color("Top"), Color("Bottom")]), startPoint: /*@START_MENU_TOKEN@*/.top/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
-                        .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                    VStack {
-                        Spacer()
-                        Text("Welcome To").modifier(CustomText()).font(.system(size: 36))
-                        Text("Chain \n \u{1F517} \n Letters")
-                            .font(.system(size: 72))
-                            .fontWeight(.bold)
-                            .multilineTextAlignment(.center)
-                            .modifier(CustomText())
-                        Spacer()
-                        Text("Hi-Score: " + String(session.highScore)).modifier(CustomText()).font(.system(size: 36))
-                        Spacer()
-                        Button("Start Game"){session.startGame()} .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).modifier(CustomText()).background(RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Box"))).font(.system(size: 36))
-                        Spacer()
-                    }.padding()
-                }
+                TitleView(session: $session)
             }
             
-            
-            
             if session.gameState == .playing {
-                ZStack{
-                    Rectangle().foregroundColor(Color.blue)
-                    
-                    VStack {
-                        
-                        VStack{
-                            Text("Opponent's Word").modifier(CustomText())
-                            Text(session.computerWord)
-                                .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                                .modifier(CustomText())
-                                .font(.system(size: 36))
-                                .animation(.linear(duration: 0.5).delay(1),value:session.computerWord)
-                        }.frame(maxWidth:.infinity,maxHeight:200).background(Color("Top"))
-                        
-                        ScrollViewReader { value in
-                            ScrollView(.horizontal,showsIndicators: false){
-                                HStack(alignment:.center){
-                                    ForEach(session.chainedWords, id: \.id){
-                                        chain in
-                                        Text(chain.word)
-                                            .font(.system(size: 48))
-                                            .lineLimit(1)
-                                            .id(chain.id)
-                                        Text("\u{1F517}")
-                                            .font(.system(size: 48))
-                                    }.onChange(of: session.chainedWords){_ in
-                                        withAnimation {
-                                            value.scrollTo("lastLetter", anchor: .trailing)}
-                                        if session.isComputerTurn {
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                session.takeComputerTurn()
-                                                inputInFocus = true
-                                            }
-                                        }
-                                    }
-                                    
-                                    Text(session.startingLetter)
-                                        .id("lastLetter")
-                                        .font(.system(size: 48)).foregroundColor(Color("HighlightText"))
-                                }.padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            }.disabled(true)
-                            
-                            
-                        }.frame(maxWidth:.infinity,maxHeight:200).background(Color("Bottom"))
-                        
-                        VStack{
-                            
-                            TextField("\(session.startingLetter)...", text: $userInput)
-                                .textInputAutocapitalization(.characters)
-                                .disabled(session.isComputerTurn)
-                                .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                                .onSubmit({
-                                    session.submitInput(userInput)
-                                    userInput = ""
-                                    self.inputInFocus = true
-                                })
-                                .font(.system(size: 48))
-                                .multilineTextAlignment(.center)
-                                .autocorrectionDisabled()
-                                .focused($inputInFocus)
-                                .onAppear {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                        self.inputInFocus = true
-                                    }
-                                }
-                            
-                            Button("SUBMIT", action: {session.submitInput(userInput)
-                                userInput = ""
-                                self.inputInFocus = true})
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .modifier(CustomText())
-                            .font(.system(size: 36))
-                            .background(RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Box")))
-                            
-                        }.frame(maxWidth:.infinity,maxHeight:.infinity).background(Color("Top"))
-                    }
-                }.onDisappear{updateHighScore()}
+                PlayView(session: $session)
             }
             
             if session.gameState == .gameOver{
-                ZStack{
-                    Rectangle().foregroundColor(Color.blue).ignoresSafeArea()
-                    
-                    VStack{
-                        
-                        Spacer()
-                        
-                        VStack {
-                            if gameOver == true{
-                                Text("Game Over")
-                                    .transition(.move(edge: .top).combined(with: .opacity))
-                                    .modifier(CustomText())
-                                    .font(.system(size: 48))
-                            }
-                        }.animation(.default, value: gameOver)
-                        
-                        Spacer()
-                        
-                        VStack {
-                            if gameOver == true{
-                                Text(session.instruction)
-                                    .transition(.opacity)
-                                    .multilineTextAlignment(.center)
-                                    .modifier(CustomText())
-                                    .font(.system(size: 32))
-                            }
-                        }.animation(.default.delay(1),value:gameOver)
-                        
-                        Spacer()
-                        
-                        VStack(alignment: .center, spacing: 40.0){
-                            if gameOver == true{
-                                Text("Your score was: " + String(session.playerScore)).modifier(CustomText())
-                                    .font(.system(size: 32))
-                                    .transition(.move(edge: .leading).combined(with: .opacity))
-                                if session.playerScore > highScoreSave{
-                                    Text("Congratulations! \n You got a new High Score!")
-                                        .multilineTextAlignment(.center)
-                                        .modifier(CustomText())
-                                        .font(.system(size: 32))
-                                        .transition(.scale)
-                                } else{
-                                    Text("High Score: " + String(session.highScore)).modifier(CustomText())
-                                        .font(.system(size: 32))
-                                        .transition(.move(edge: .trailing).combined(with: .opacity))
-                                }
-                            }
-                        }.animation(.default.delay(2), value:gameOver)
-                        
-                        Spacer()
-                        
-                        VStack{
-                            if gameOver == true{
-                                Button("Restart", action: {session.startGame()})
-                                    .transition(.opacity)
-                                    .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                                    .background(RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Box")))
-                                    .modifier(CustomText())
-                                    .font(.system(size: 36))
-                            }
-                        }.animation(.default.speed(0.5).delay(3), value: gameOver)
-                        
-                        Spacer()
-                        
-                    }.animation(.default, value: gameOver)
-                }.onAppear{DispatchQueue.main.asyncAfter(deadline: .now() + 0.75){gameOver=true}}.onDisappear{gameOver=false}
+                GameOverView(session: $session)
             }
-        }.animation(.default, value: session.gameState)
+        }.animation(.easeOut(duration: 1), value: session.gameState)
     }
 }
 
@@ -221,8 +50,7 @@ struct ContentView_Previews: PreviewProvider {
     
     static var exampleSession: GameLogic {
         var session = GameLogic(hiScore: 0)
-                session.startGame()
-        //        session.gameState = .gameOver
+        session.gameState = .gameOver
         return session
     }
 }
