@@ -63,7 +63,7 @@
 		D9F2358E290ABB17009D3678 /* LetterChainUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LetterChainUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9F23592290ABB17009D3678 /* LetterChainUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterChainUITests.swift; sourceTree = "<group>"; };
 		D9F23594290ABB17009D3678 /* LetterChainUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterChainUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		D9F235A1290AC672009D3678 /* logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = logic.swift; sourceTree = "<group>"; };
+		D9F235A1290AC672009D3678 /* commandLineLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = commandLineLogic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				D98C6D6C290B064F00F55B28 /* Fonts */,
-				D9F235A1290AC672009D3678 /* logic.swift */,
+				D9F235A1290AC672009D3678 /* commandLineLogic.swift */,
 				D9F23576290ABB16009D3678 /* LetterChainApp.swift */,
 				D9E73FDD290C567800CF234A /* UserDefaults.swift */,
 				D9F23578290ABB16009D3678 /* ContentView.swift */,

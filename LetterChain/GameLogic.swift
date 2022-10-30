@@ -23,7 +23,7 @@ struct GameLogic{
     
     var highScore: Int
     
-   let wordsSelection: [String:Set<String>]
+    let wordsSelection: [String:Set<String>]
     
     let validator: WordValidator
     
@@ -41,7 +41,7 @@ struct GameLogic{
         catch(_){
             print("error")
         }
-
+        
         wordsSelection = wordSet.reduce(into: [String: Set<String>]()) { partialResult, word in
             if word.count >= 3, let key = word.first?.uppercased() {
                 var s = partialResult[key] ?? []
@@ -62,7 +62,7 @@ struct GameLogic{
         guard isComputerTurn == false else{
             return String(playerWord[playerWord.index(before: playerWord.endIndex)])
         }
-       return String(computerWord[computerWord.index(before: computerWord.endIndex)])
+        return String(computerWord[computerWord.index(before: computerWord.endIndex)])
     }
     
     var previousWords: Set<String> = []
@@ -88,7 +88,7 @@ struct GameLogic{
         getNewWord()
         recordWord(word: computerWord)
         gameState = .playing
-
+        
     }
     
     mutating func submitInput(_ userInput:String) -> Void{
@@ -106,14 +106,14 @@ struct GameLogic{
         
         if firstLetter != startingLetter{
             gameOver(  .wrongLetter)
-
+            
         } else if previousWords.contains(playerWord) == true{
             gameOver( .repeated)
         } else {
-  newRound()
+            newRound()
         }
     }
-
+    
     mutating func gameOver(  _ condition: GameOverReason){
         if playerScore > highScore{
             highScore = playerScore
@@ -129,7 +129,7 @@ struct GameLogic{
         gameState = .gameOver
     }
     
-
+    
     private mutating func getNewWord() {
         let newWords: Set<String>?
         if playerWord == ""{
@@ -148,13 +148,10 @@ struct GameLogic{
             }
         }
     }
-
+    
     private mutating func recordWord(word:String) {
-      previousWords.insert(word)
+        previousWords.insert(word)
         chainedWords.append(Entry(input:word))
-//        if chainedWords.count > 5{
-//            chainedWords.removeFirst()
-//        }
     }
     
     private mutating func incrementScore() {
@@ -173,7 +170,7 @@ struct GameLogic{
         isComputerTurn = false
         playerWord = ""
     }
-  
+    
     private mutating func resetGame() {
         playerScore = 0
         previousWords.removeAll()
@@ -181,21 +178,21 @@ struct GameLogic{
         computerWord = ""
         playerWord = ""
     }
-
+    
     private mutating func validateInput() -> Bool{
-      guard playerWord.allSatisfy({$0.isWholeNumber == false}) == true else {
-      instruction = "Please don't type numbers"
-      return false
-    }
-    guard playerWord.allSatisfy({$0 != " "}) == true else {
-      instruction = "Please omit any spaces, and type only one word"
-      return false
-    }
-    guard playerWord.count >= 3 else{
-      instruction = "Please input a word that is at least 3 letters long"
-      return false
-    }
-      return true
+        guard playerWord.allSatisfy({$0.isWholeNumber == false}) == true else {
+            instruction = "Please don't type numbers"
+            return false
+        }
+        guard playerWord.allSatisfy({$0 != " "}) == true else {
+            instruction = "Please omit any spaces, and type only one word"
+            return false
+        }
+        guard playerWord.count >= 3 else{
+            instruction = "Please input a word that is at least 3 letters long"
+            return false
+        }
+        return true
     }
     
 }
