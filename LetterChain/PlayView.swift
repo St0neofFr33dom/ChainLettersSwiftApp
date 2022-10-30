@@ -152,7 +152,7 @@ struct PlayView: View {
                             
                         }.frame(maxWidth:.infinity,maxHeight:100).background(Color("Box"))
                         
-                        VStack{
+                        HStack{
                             
                             TextField(placeHolder, text: $userInput)
                                 .textInputAutocapitalization(.characters)
@@ -164,7 +164,7 @@ struct PlayView: View {
                                     self.inputInFocus = true
                                 })
                                 .font(.system(size: 36))
-                                .multilineTextAlignment(.center)
+                                .multilineTextAlignment(.leading)
                                 .autocorrectionDisabled()
                                 .focused($inputInFocus)
                                 .onAppear {
@@ -181,7 +181,7 @@ struct PlayView: View {
                             .font(.system(size: 24))
                             .background(RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Box")))
                             
-                        }.frame(maxWidth:.infinity,maxHeight:200)
+                        }.frame(maxWidth:400,maxHeight:200)
                     }
                     // || END OF DIFFERENCES ||
                 }
