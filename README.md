@@ -11,9 +11,10 @@ Game ends when you input an invalid word
 
 ## Screenshots
 
-![Title Screenshot](./screenshots/TitleScreen.png)
-![Game Screenshot](./screenshots/GameScreen.png)
-![GameOver Screenshot](./screenshots/GameOverScreen.png)
+
+<img src="./screenshots/TitleScreen.png" alt="Title Screen" width=115 height=250>
+<img src="./screenshots/GameScreen.png" alt="Game Screen" width=115 height=250>
+<img src="./screenshots/GameOverScreen.png" alt="Game Over Screen" width=115 height=250>
 
 ## Run Locally
 
