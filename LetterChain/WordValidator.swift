@@ -7,30 +7,25 @@
 
 import Foundation
 
-struct WordValidator{
-    
+struct WordValidator {
+
     let allWords: Set<String>
-    init(){
+    init() {
         let path = Bundle.main.path(forResource: "allWords", ofType: "txt")
         do {
             let text = try String(contentsOfFile: path!)
             allWords = Set(text.components(separatedBy: "\n").map { $0.trimmingCharacters(in: .whitespacesAndNewlines)})
             return
 
-        }
-        catch(_){
+        } catch _ {
             print("error")
         }
         allWords = []
     }
 
-    func validateInput(_ userInput:String)-> Bool{
+    func validateInput(_ userInput: String) -> Bool {
         let word = userInput.lowercased()
         return allWords.contains(word)
     }
-    
-    
+
 }
-
-
-
