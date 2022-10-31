@@ -15,6 +15,68 @@ struct GameOverView: View {
 
     @State var gameOver = false
 
+    var body: some View {
+
+        VStack {
+            Spacer()
+            VStack {
+                if gameOver {
+                    Text("Game Over")
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .modifier(CustomText())
+                        .font(.system(size: 48))
+                }
+            }.animation(.default, value: gameOver)
+            Spacer()
+            VStack {
+                if gameOver {
+                    Text(session.instruction)
+                        .transition(.opacity)
+                        .multilineTextAlignment(.center)
+                        .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                        .modifier(CustomText())
+                        .font(.system(size: 24))
+                }
+            }.animation(.default.delay(1), value: gameOver)
+            Spacer()
+            if sizeClass == .compact {
+                // || LANDSCAPE ||
+                HStack {
+                    if gameOver {
+                        scoreTracker
+                        Spacer()
+                        highScore()
+                    }
+                }.animation(.default.delay(2), value: gameOver).frame(maxWidth: 500)
+            } else {
+                // || PORTRAIT ||
+                VStack(alignment: .center, spacing: 40.0) {
+                    if gameOver {
+                        scoreTracker
+                        highScore()
+                    }
+                }.animation(.default.delay(2), value: gameOver)
+            }
+            // || END OF DIFFERENCES ||
+            Spacer()
+            VStack {
+                if gameOver {
+                    Button("Restart", action: {session.startGame()})
+                        .transition(.opacity)
+                        .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                        .background(RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Box")))
+                        .modifier(CustomText())
+                        .font(.system(size: 36))
+                }
+            }.animation(.default.speed(0.5).delay(3), value: gameOver)
+
+            Spacer()
+
+        }.animation(.default, value: gameOver)
+        .onAppear {DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {gameOver=true}}
+        .onDisappear {gameOver=false}
+    }
+
     var scoreTracker: some View {
         VStack {
             Text("Score")
@@ -26,6 +88,7 @@ struct GameOverView: View {
                 .frame(maxWidth: 200)
         }.transition(.move(edge: .leading).combined(with: .opacity))
     }
+
     @ViewBuilder func highScore() -> some View {
         if session.playerScore > highScoreSave {
             VStack {
@@ -46,66 +109,5 @@ struct GameOverView: View {
 
             }.transition(.move(edge: .trailing).combined(with: .opacity))
         }
-    }
-    var body: some View {
-
-            VStack {
-                Spacer()
-                VStack {
-                    if gameOver {
-                        Text("Game Over")
-                            .transition(.move(edge: .top).combined(with: .opacity))
-                            .modifier(CustomText())
-                            .font(.system(size: 48))
-                    }
-                }.animation(.default, value: gameOver)
-                Spacer()
-                VStack {
-                    if gameOver {
-                        Text(session.instruction)
-                            .transition(.opacity)
-                            .multilineTextAlignment(.center)
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .modifier(CustomText())
-                            .font(.system(size: 24))
-                    }
-                }.animation(.default.delay(1), value: gameOver)
-                Spacer()
-                if sizeClass == .compact {
-                    // || LANDSCAPE ||
-                    HStack {
-                        if gameOver {
-                            scoreTracker
-                            Spacer()
-                            highScore()
-                        }
-                    }.animation(.default.delay(2), value: gameOver).frame(maxWidth: 500)
-                } else {
-                    // || PORTRAIT ||
-                    VStack(alignment: .center, spacing: 40.0) {
-                        if gameOver {
-                            scoreTracker
-                            highScore()
-                        }
-                    }.animation(.default.delay(2), value: gameOver)
-                }
-                // || END OF DIFFERENCES ||
-                Spacer()
-                VStack {
-                    if gameOver {
-                        Button("Restart", action: {session.startGame()})
-                            .transition(.opacity)
-                            .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                            .background(RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Box")))
-                            .modifier(CustomText())
-                            .font(.system(size: 36))
-                    }
-                }.animation(.default.speed(0.5).delay(3), value: gameOver)
-
-                Spacer()
-
-            }.animation(.default, value: gameOver)
-            .onAppear {DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {gameOver=true}}
-            .onDisappear {gameOver=false}
     }
 }

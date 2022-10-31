@@ -15,8 +15,58 @@ struct PlayView: View {
 
     @State var userInput: String = ""
 
+    var body: some View {
+        VStack {
+            if sizeClass == .compact {
+                landscape
+            } else {
+                portrait
+            }
+        }.onDisappear {updateHighScore()}
+    }
+
+    var portrait: some View {
+        VStack {
+            VStack {
+                Text("Opponent's Word").modifier(CustomText())
+                Text(session.computerWord)
+                    .modifier(CustomText())
+                    .font(.system(size: 36))
+                    .animation(.linear(duration: 0.5).delay(1), value: session.computerWord)
+            }.frame(maxWidth: .infinity, minHeight: 50)
+            chain.frame(maxWidth: .infinity).background(Color("Box"))
+
+            VStack {
+
+                textField(size: 48, alignment: .center)
+                submitButton(size: 36)
+
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    var landscape: some View {
+        VStack {
+            chain.frame(maxWidth: .infinity, maxHeight: 100).background(Color("Box"))
+            HStack {
+                VStack {
+                    Text("Opponent's Word").modifier(CustomText())
+                    Text(session.computerWord)
+                        .modifier(CustomText())
+                        .font(.system(size: 36))
+                        .animation(.linear(duration: 0.5).delay(1), value: session.computerWord)
+                }.frame(maxWidth: .infinity, minHeight: 50)
+                HStack {
+                    textField(size: 36, alignment: .leading)
+                    submitButton(size: 24)
+
+                }.frame(maxWidth: 400, maxHeight: 200)
+            }
+        }
+    }
+
     var placeHolder: String {
-        if session.isComputerTurn == true {
+        if session.isComputerTurn {
             return ""
         } else {
             return "\(session.startingLetter)..."
@@ -103,54 +153,4 @@ struct PlayView: View {
             .background(RoundedRectangle(cornerRadius: 40).foregroundColor(Color("Box")))
             .disabled(buttonDisabled)
     }
-
-    var portrait: some View {
-        VStack {
-            VStack {
-                Text("Opponent's Word").modifier(CustomText())
-                Text(session.computerWord)
-                    .modifier(CustomText())
-                    .font(.system(size: 36))
-                    .animation(.linear(duration: 0.5).delay(1), value: session.computerWord)
-            }.frame(maxWidth: .infinity, minHeight: 50)
-            chain.frame(maxWidth: .infinity).background(Color("Box"))
-
-            VStack {
-
-                textField(size: 48, alignment: .center)
-                submitButton(size: 36)
-
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-    }
-
-    var landscape: some View {
-        VStack {
-            chain.frame(maxWidth: .infinity, maxHeight: 100).background(Color("Box"))
-            HStack {
-                VStack {
-                    Text("Opponent's Word").modifier(CustomText())
-                    Text(session.computerWord)
-                        .modifier(CustomText())
-                        .font(.system(size: 36))
-                        .animation(.linear(duration: 0.5).delay(1), value: session.computerWord)
-                }.frame(maxWidth: .infinity, minHeight: 50)
-                HStack {
-                    textField(size: 36, alignment: .leading)
-                    submitButton(size: 24)
-
-                }.frame(maxWidth: 400, maxHeight: 200)
-            }
-        }
-    }
-
-    var body: some View {
-            VStack {
-                if sizeClass == .compact {
-                    landscape
-                } else {
-                    portrait
-                }
-            }.onDisappear {updateHighScore()}
-        }
 }

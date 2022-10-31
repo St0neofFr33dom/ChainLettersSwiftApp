@@ -36,7 +36,7 @@ struct GameLogic {
         do {
             let text = try String(contentsOfFile: path!)
             wordSet = Set(text.components(separatedBy: "\n")
-                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()})
+                            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()})
         } catch _ {
             print("error")
         }

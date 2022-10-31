@@ -15,15 +15,17 @@ struct CustomText: ViewModifier {
 
 struct ContentView: View {
     @State var session: GameLogic
+
     init(session: GameLogic = GameLogic(hiScore: highScoreSave)) {
         self.session = session
     }
+
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color("Top"), Color("Bottom")]),
-                            startPoint: /*@START_MENU_TOKEN@*/.top/*@END_MENU_TOKEN@*/,
-                            endPoint: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
-            .edgesIgnoringSafeArea(.all)
+                           startPoint: /*@START_MENU_TOKEN@*/.top/*@END_MENU_TOKEN@*/,
+                           endPoint: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
+                .edgesIgnoringSafeArea(.all)
             if session.gameState == .title {
                 TitleView(session: $session)
             }
