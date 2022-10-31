@@ -61,6 +61,9 @@
 		D9F2357E290ABB17009D3678 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D9F23584290ABB17009D3678 /* LetterChainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LetterChainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9F2358E290ABB17009D3678 /* LetterChainUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LetterChainUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9F6F3472910004F003A270E /* TitleScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TitleScreen.png; sourceTree = "<group>"; };
+		D9F6F3482910005E003A270E /* GameOverScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameOverScreen.png; sourceTree = "<group>"; };
+		D9F6F3492910005E003A270E /* GameScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameScreen.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,16 +91,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D98C6D6C290B064F00F55B28 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Fonts;
-			sourceTree = "<group>";
-		};
 		D9F2356A290ABB16009D3678 = {
 			isa = PBXGroup;
 			children = (
+				D9F6F346290FFFF7003A270E /* screenshots */,
 				D9E73FDB290C2E5F00CF234A /* computerWords.txt */,
 				D9E73FCD290BE6DB00CF234A /* README.md */,
 				D9E73FD7290C183500CF234A /* allWords.txt */,
@@ -121,7 +118,6 @@
 		D9F23575290ABB16009D3678 /* LetterChain */ = {
 			isa = PBXGroup;
 			children = (
-				D98C6D6C290B064F00F55B28 /* Fonts */,
 				D9F23576290ABB16009D3678 /* LetterChainApp.swift */,
 				D9E73FDD290C567800CF234A /* UserDefaults.swift */,
 				D9F23578290ABB16009D3678 /* ContentView.swift */,
@@ -160,6 +156,16 @@
 			);
 			path = LetterChainUITests;
 			sourceTree = "<group>";
+		};
+		D9F6F346290FFFF7003A270E /* screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				D9F6F3492910005E003A270E /* GameScreen.png */,
+				D9F6F3482910005E003A270E /* GameOverScreen.png */,
+				D9F6F3472910004F003A270E /* TitleScreen.png */,
+			);
+			path = screenshots;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 

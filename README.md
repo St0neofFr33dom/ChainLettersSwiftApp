@@ -9,6 +9,12 @@ You can't repeat words that you or the computer used
 Every valid word you enter earns you one point
 Game ends when you input an invalid word
 
+## Screenshots
+
+![Title Screenshot](./screenshots/TitleScreen.png)
+![Game Screenshot](./screenshots/GameScreen.png)
+![GameOver Screenshot](./screenshots/GameOverScreen.png)
+
 ## Run Locally
 
 You need xCode installed on a Macintosh computer to run this program.
